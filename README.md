@@ -1,1 +1,1 @@
-Legacy of warming and microbial treatments shape root exudates and rhizosphere fungal communities of a tropical tree <img width="468" height="97" alt="image" src="https://github.com/user-attachments/assets/82ffe853-33ac-4100-8c08-bf7bda8fadd0" />
+
