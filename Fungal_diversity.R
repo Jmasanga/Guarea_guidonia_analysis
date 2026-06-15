@@ -1,5 +1,8 @@
+title: "Legacy of warming and microbial treatments affect metabolite composition in 
+root exudates and rhizosphere fungal communities of a tropical tree"
+author: "Joel Masanga"
 setwd("~/Fungal_composition")
-
+#Load packages
 library(phyloseq)
 library(vegan)
 library(ggplot2)
@@ -105,7 +108,7 @@ write.csv(alpha_div, "results/Fungal_alpha_diversity.csv")
 ps.pcoa <- ordinate(ps.rare, method = "PCoA", distance = "bray")
 p_pcoa <- plot_ordination(ps.rare, ps.pcoa, type = "samples",
                           color = "Microbiome_treatment",
-                          shape = "Soil_inoculum") +
+                          shape = "Microbial_legacy") +
   geom_point(size = 3) +
   theme_minimal()
 ggsave("results/Fungal_PCoA.png", p_pcoa, width = 8, height = 6)
@@ -113,7 +116,7 @@ ggsave("results/Fungal_PCoA.png", p_pcoa, width = 8, height = 6)
 ## PERMANOVA
 dist_mat <- phyloseq::distance(ps.rare, method = "bray")
 metadata_df <- data.frame(sample_data(ps.rare))
-permanova <- adonis2(dist_mat ~ Microbiome_treatment + Soil_inoculum +
+permanova <- adonis2(dist_mat ~ Microbiome_treatment + Microbial_legacy +
                        Density + Moisture,
                      data = metadata_df, permutations = 999)
 write.csv(as.data.frame(permanova), "results/Fungal_PERMANOVA_results.csv")
@@ -141,7 +144,7 @@ if (requireNamespace("microbiome", quietly = TRUE)) {
 
 output <- ancombc2(
   data = ps.rare, tax_level = "Family",
-  fix_formula = "Microbiome_treatment + Soil_inoculum + Density + Moisture",
+  fix_formula = "Microbiome_treatment + Microbial_legacy + Density + Moisture",
   p_adj_method = "holm", pseudo_sens = TRUE,
   prv_cut = 0.10, lib_cut = 1000, s0_perc = 0.05,
   group = "Microbiome_treatment", struc_zero = TRUE, neg_lb = TRUE,
