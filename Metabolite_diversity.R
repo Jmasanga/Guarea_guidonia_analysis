@@ -1,3 +1,6 @@
+title: "Legacy of warming and microbial treatments affect metabolite composition in 
+root exudates and rhizosphere fungal communities of a tropical tree"
+author: "Joel Masanga"
 setwd("~/Metabolomics_analyses")
 
 library(chemodiv)
@@ -47,7 +50,7 @@ GuaguiBetaDiv <- calcBetaDiv(sampleData = GuaguiCompData,
 Guagui_df <- read.csv("data/Guagui_Normalized_Metabolites.csv")
 Guarea_Metadata <- metadata
 
-Guagui_df$combined_class <- interaction(Guagui_df$Soil_inoculum, 
+Guagui_df$combined_class <- interaction(Guagui_df$Microbial_legacy, 
                                         Guagui_df$Microbiome_treatment, 
                                         Guagui_df$Density, 
                                         Guagui_df$Moisture)
@@ -57,15 +60,15 @@ lda_pred <- predict(lda_result)
 lda_scores <- as.data.frame(lda_pred$x)
 
 lda_scores$Microbiome_treatment <- Guarea_Metadata$Microbiome_treatment
-lda_scores$Soil_inoculum <- Guarea_Metadata$Soil_inoculum
+lda_scores$Microbial_legacy <- Guarea_Metadata$Microbial_legacy
 lda_scores$Density <- Guarea_Metadata$Density
 lda_scores$Moisture <- Guarea_Metadata$Moisture
 
 lda_scores$Shape <- factor(
-  ifelse(lda_scores$Soil_inoculum == "Ambient" & lda_scores$Moisture == "WS", "Ambient_WS",
-         ifelse(lda_scores$Soil_inoculum == "Ambient" & lda_scores$Moisture == "WW", "Ambient_WW",
-                ifelse(lda_scores$Soil_inoculum == "Warmed" & lda_scores$Moisture == "WS", "Warmed_WS",
-                       ifelse(lda_scores$Soil_inoculum == "Warmed" & lda_scores$Moisture == "WW", "Warmed_WW", NA)))))
+  ifelse(lda_scores$Microbial_legacy == "Ambient" & lda_scores$Moisture == "WS", "Ambient_WS",
+         ifelse(lda_scores$Microbial_legacy == "Ambient" & lda_scores$Moisture == "WW", "Ambient_WW",
+                ifelse(lda_scores$Microbial_legacy == "Warmed" & lda_scores$Moisture == "WS", "Warmed_WS",
+                       ifelse(lda_scores$Microbial_legacy == "Warmed" & lda_scores$Moisture == "WW", "Warmed_WW", NA)))))
 
 # Metabolite Enrichment Analysis
 metab_matrix <- read.csv("data/Guagui_Normalized_Metabolites.csv", row.names = 1)
