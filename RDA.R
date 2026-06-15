@@ -1,4 +1,7 @@
-
+---
+  title: "Legacy of warming and microbial treatments affect metabolite composition in 
+root exudates and rhizosphere fungal communities of a tropical tree"
+author: "Joel Masanga"
 setwd("~/Metabolomics_analyses")
 
 library(vegan)       # RDA, PCA, ecological stats
