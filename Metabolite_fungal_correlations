@@ -1,0 +1,64 @@
+---
+  title: "Legacy of warming and microbial treatments affect metabolite composition in 
+root exudates and rhizosphere fungal communities of a tropical tree"
+author: "Joel Masanga"
+##Metabolite PC1 vs Fungal Richness
+library(ggpubr)
+MetPC1vsFungalrichness <- ggplot(Corr_input1, aes(x = MetabPC1, y = richness)) +
+  geom_point(size = 3, color = "black", alpha = 1) +
+  geom_smooth(method = "lm", se = TRUE, color = "#d7191c", linetype = "solid") +
+  theme_minimal(base_size = 18) +
+  labs(x = "Metabolite PC1", y = "Fungal richness") +
+  theme(
+    axis.title = element_text(face = "bold", size = 20),
+    axis.text  = element_text(size = 16),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.8),
+    axis.line = element_blank()) +
+  ggpubr::stat_cor(method = "pearson",
+                   label.x.npc = "left",
+                   label.y.npc = "top",
+                   size = 6)
+
+MetPC1vsFungalrichness
+##Distance–Distance relationships
+# Example setup for matrix2 vs matrix10 (Fatty acids vs Fungal_otu_bray_curtis)
+matrix2 <- as.data.frame(matrix2)
+rownames(matrix2) <- matrix2[, 1]
+matrix2 <- matrix2[, -1]
+matrix10 <- as.data.frame(matrix10)
+rownames(matrix10) <- matrix10[, 1]
+matrix10 <- matrix10[, -1]
+stopifnot(all(rownames(matrix2) == rownames(matrix10)))
+df1 <- melt(as.matrix(matrix2), varnames = c("Site1", "Site2"), value.name = "Dist1")
+df2 <- melt(as.matrix(matrix10), varnames = c("Site1", "Site2"), value.name = "Dist2")
+df1$Site2 <- as.integer(df1$Site2)
+df2$Site2 <- as.integer(as.character(df2$Site2))
+df_combined <- inner_join(df1, df2, by = c("Site1", "Site2")) %>%
+  filter(Site1 != Site2) %>%
+  rowwise() %>%
+  mutate(PairID = paste(sort(c(Site1, Site2)), collapse = "_")) %>%
+  distinct(PairID, .keep_all = TRUE) %>%
+  ungroup()
+model <- lm(Dist2 ~ Dist1, data = df_combined)
+summary_stats <- summary(model)
+r_squared <- summary_stats$r.squared
+p_value   <- summary_stats$coefficients[2, 4]
+r_text <- paste0("R² = ", round(r_squared, 3))
+p_text <- paste0("p = ", signif(p_value, 2))
+FattyacidsVsFungal_distance <- ggplot(df_combined, aes(x = Dist1, y = Dist2)) +
+  geom_point(size = 1.2, shape = 1, color = "grey32") +
+  geom_smooth(method = "lm", color = "blue", se = TRUE, size = 1) +
+  annotate("text", x = -Inf, y = Inf, 
+           label = paste(r_text, p_text, sep = ", "), 
+           hjust = -0.1, vjust = 1.2, size = 5, fontface = "italic") +
+  labs(x = "Fatty acids distance", 
+       y = "Fungal distance") +
+  theme_bw(base_size = 16) +
+  theme(
+    panel.grid = element_blank(),
+    axis.text  = element_text(size = 14),
+    axis.title = element_text(size = 16),
+    plot.title = element_text(size = 16, face = "bold"))
+FattyacidsVsFungal_distance
