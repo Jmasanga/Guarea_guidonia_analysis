@@ -13,3 +13,4 @@ Fungal_diversity.R contains R code for analysis of fungal diversity, community c
 Analysis adopts `phyloseq` and `ANCOMBC2` packages
 RDA.R contains R code used for linking fungal OTUs with metabolite principal components
 Metabolite_fungal_correlations.R contains code used to perform associations between root exudate metabolite distances and fungal community and trait distances.
+Additional_Dataset.xlsx contains raw data (untargeted metabolomics, fungal OTUs and plant traits) as well as additional analyzed datasets.
